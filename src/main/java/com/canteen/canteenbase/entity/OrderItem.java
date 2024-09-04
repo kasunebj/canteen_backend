@@ -1,18 +1,24 @@
 package com.canteen.canteenbase.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "order_items")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private Order order;
 
+    @Column(nullable = false)
     private Long itemId;
+
+    @Column(nullable = false)
     private int quantity;
 
     // Other fields, getters, and setters
