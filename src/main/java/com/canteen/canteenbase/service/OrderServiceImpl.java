@@ -6,10 +6,12 @@ import com.canteen.canteenbase.repositories.OrderItemRepository;
 import com.canteen.canteenbase.repositories.OrderRepository;
 import com.canteen.canteenbase.responseDTOs.OrderItemDto;
 import com.canteen.canteenbase.responseDTOs.OrderRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -20,20 +22,28 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    @Override
-    public Order createOrder(OrderRequest orderRequest) {
-        Order order = new Order();
-        List<OrderItemDto> items = orderRequest.getItems();
-        order.setTotalPrice(orderRequest.getTotalPrice());
-        for (OrderItemDto itemDto : items) {
-            OrderItem item = new OrderItem();
-            item.setItemId(itemDto.getItemId());
-            item.setQuantity(itemDto.getQuantity());
-            item.setOrder(order);
-            order.getItems().add(item);
-        }
-        return orderRepository.save(order);
-    }
+        @Transactional
+        @Override
+        public Order createOrder(OrderRequest orderRequest) {
+            Order order = new Order();
+            order.setTotalPrice(orderRequest.getTotalPrice());
+            order.setOrderCompleted(false);
+            List<OrderItem> orderItems = orderRequest.getItems().stream()
+                    .map(itemDto -> {
+                        OrderItem orderItem = new OrderItem();
+                        orderItem.setItemId(itemDto.getItemId());
+                        orderItem.setQuantity(itemDto.getQuantity());
+                        orderItem.setOrder(order); // Ensure the order reference is set
+                        return orderItem;
+                    })
+                    .collect(Collectors.toList());
 
+            order.setItems(orderItems); // Set the list of order items in the order
+
+            // Save the order which will cascade the save operation to order items
+             orderRepository.save(order);
+//             orderItemRepository.saveAll(orderItems);
+             return order;
+        }
 
 }

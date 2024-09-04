@@ -1,21 +1,36 @@
 package com.canteen.canteenbase.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>();
 
     @Column(nullable = false)
     private double totalPrice;
+
+    @Column(nullable = false)
+    private Boolean orderCompleted;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", updatable = false)
+    private Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     // Other fields, getters, and setters
 
@@ -42,11 +57,27 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-//    public double getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(double price) {
-//        this.price = price;
-//    }
+    public Boolean getOrderCompleted() {
+        return orderCompleted;
+    }
+
+    public void setOrderCompleted(Boolean orderCompleted) {
+        this.orderCompleted = orderCompleted;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
