@@ -7,5 +7,6 @@ import com.canteen.canteenbase.responseDTOs.OrderRequest;
 import java.util.List;
 
 public interface OrderService {
-    Order createOrder(OrderRequest orderRequest);
+    Order createOrder(OrderRequest orderRequest,Long userId);
+    List<Order> getCompletedOrdersByUserId(Long userId);
 }

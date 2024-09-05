@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (user.getPassword().equals(password)) { // Passwords should be hashed in real applications
-                return new LoginSuccessResponse(user.getUsertype()); // Return user type on successful login
+                return new LoginSuccessResponse(user.getUsertype(),user.getId()); // Return user type on successful login
             }
         }
         return new LoginFailureResponse("Login failed"); // Return failure message

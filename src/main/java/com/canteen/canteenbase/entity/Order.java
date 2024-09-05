@@ -32,6 +32,9 @@ public class Order {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column(name = "user_id")
+    private Long user;
+
     // Other fields, getters, and setters
 
     public Long getId() {       return id;
@@ -79,5 +82,13 @@ public class Order {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public void setUser(Long user) {
+        this.user = user;
     }
 }

@@ -22,12 +22,18 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Override
+    public List<Order> getCompletedOrdersByUserId(Long userId) {
+        return orderRepository.findCompletedOrdersByUserId(userId);
+    }
+
         @Transactional
         @Override
-        public Order createOrder(OrderRequest orderRequest) {
+        public Order createOrder(OrderRequest orderRequest,Long userId) {
             Order order = new Order();
             order.setTotalPrice(orderRequest.getTotalPrice());
             order.setOrderCompleted(false);
+            order.setUser(userId);
             List<OrderItem> orderItems = orderRequest.getItems().stream()
                     .map(itemDto -> {
                         OrderItem orderItem = new OrderItem();
