@@ -27,7 +27,12 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findCompletedOrdersByUserId(userId);
     }
 
-        @Transactional
+    @Override
+    public List<Order> getOngoingOrdersByUserId(Long userId) {
+        return orderRepository.findOngoingOrdersByUserId(userId);
+    }
+
+    @Transactional
         @Override
         public Order createOrder(OrderRequest orderRequest,Long userId) {
             Order order = new Order();

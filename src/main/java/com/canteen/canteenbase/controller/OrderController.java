@@ -35,5 +35,19 @@ public class OrderController {
             return ResponseEntity.ok(completedOrders);
         }
     }
+
+    @GetMapping("/ongoing")
+    public ResponseEntity<List<Order>> getOngoingOrders(
+            @RequestHeader("userId") Long userId) {
+
+        // Fetch completed orders for the user
+        List<Order> completedOrders = orderService.getOngoingOrdersByUserId(userId);
+
+        if (completedOrders.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(completedOrders);
+        }
+    }
 }
 

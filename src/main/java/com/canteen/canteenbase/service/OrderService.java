@@ -9,4 +9,6 @@ import java.util.List;
 public interface OrderService {
     Order createOrder(OrderRequest orderRequest,Long userId);
     List<Order> getCompletedOrdersByUserId(Long userId);
+    List<Order> getOngoingOrdersByUserId(Long userId);
+
 }
